@@ -5,7 +5,7 @@ main: me.raniy.plugins.UserHistory.UserHistory
 name: UserHistory
 startup: postworld
 url:
-version: 0.0.1 Alpha
+version: v1.1
 commands:
     myage:
         description: Tells you how long you have been on the server now and total.
