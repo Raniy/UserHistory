@@ -46,7 +46,7 @@ public class UserHistoryPlayerListener extends PlayerListener{
     		// Returning user!
           	//Tell the console
         	this.myPlugin.doLog("Login by: " + thePlayer.getName() + " from IP: " + thePlayer.getAddress().getAddress().getHostAddress() + " last online: " + this.myPlugin.playerLastOnline(thePlayer));
-        	thePlayer.sendMessage("We last saw you " + ChatColor.GREEN + this.myPlugin.timeToString(this.myPlugin.getLastSeen(thePlayer)) + ChatColor.WHITE + " ago at: " + ChatColor.GREEN + this.myPlugin.playerLastOffline(thePlayer).toString());
+        	thePlayer.sendMessage("We last saw you " + ChatColor.GREEN + this.myPlugin.timeToString(this.myPlugin.getLastSeen(thePlayer)) + ChatColor.WHITE + " ago at: " + ChatColor.GREEN + this.myPlugin.playerLastOnline(thePlayer).toString());
         	// Record the login event
         	this.insertLoginintoDB(thePlayer);
         	

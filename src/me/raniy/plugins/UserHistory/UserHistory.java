@@ -27,17 +27,15 @@ import org.bukkit.ChatColor;
 @SuppressWarnings("unused")
 public class UserHistory extends JavaPlugin {
 	private Logger log=Logger.getLogger("Minecraft");
-	public Configuration MyConfig = null;
-	public Connection MyMySQL = null;
+	public Configuration myConfig = null;
+	public Connection myMySQL = null;
 	public Statement myStatement = null;
-	public PluginDescriptionFile MyDesc = null;
+	public PluginDescriptionFile myDesc = null;
 	public UserHistoryPlayerListener myListener = null;
 	private String MySQLUser = null, MySQLPass = null, MySQLIP = null, MySQLPort = null;
 	private String MySQLDB = null;
 	public java.util.Properties myProperties= null;
 	private String[] allKnownPlayers = null;
-
-
 	
 	
     public void onDisable() {
@@ -163,17 +161,17 @@ public class UserHistory extends JavaPlugin {
     }
     
     private void getMySettings(){
-    	this.MyDesc = this.getDescription();
-    	this.MyConfig = this.getConfiguration();
+    	this.myDesc = this.getDescription();
+    	this.myConfig = this.getConfiguration();
     	this.myProperties = new java.util.Properties();
     	// Load our startup variables, set defaults if no config was present
-    	this.MySQLUser = this.MyConfig.getString("MySQL.User","minecraft");
-    	this.MySQLPass = this.MyConfig.getString("MySQL.Pass","password");
-    	this.MySQLIP = this.MyConfig.getString("MySQL.IP","127.0.0.1");
-    	this.MySQLPort = this.MyConfig.getString("MySQL.Port","3306");
-    	this.setMySQLDB(this.MyConfig.getString("MySQL.DB","minecraft"));
+    	this.MySQLUser = this.myConfig.getString("MySQL.User","minecraft");
+    	this.MySQLPass = this.myConfig.getString("MySQL.Pass","password");
+    	this.MySQLIP = this.myConfig.getString("MySQL.IP","127.0.0.1");
+    	this.MySQLPort = this.myConfig.getString("MySQL.Port","3306");
+    	this.setMySQLDB(this.myConfig.getString("MySQL.DB","minecraft"));
     	//Make sure the config file is created.
-    	this.MyConfig.save();
+    	this.myConfig.save();
 
     }
     
@@ -195,8 +193,8 @@ public class UserHistory extends JavaPlugin {
     	try {
     		// This will load the MySQL driver
     		Class.forName("com.mysql.jdbc.Driver");
-			this.MyMySQL  = DriverManager.getConnection(this.getJDBCString(this.MySQLIP, this.MySQLPort, this.getMySQLDB()), this.MySQLUser, this.MySQLPass);
-			this.myStatement = this.MyMySQL.createStatement();
+			this.myMySQL  = DriverManager.getConnection(this.getJDBCString(this.MySQLIP, this.MySQLPort, this.getMySQLDB()), this.MySQLUser, this.MySQLPass);
+			this.myStatement = this.myMySQL.createStatement();
 			
 		} catch (SQLException e) {
 			this.doLog("SQL Error! " + e.getMessage());
@@ -207,7 +205,7 @@ public class UserHistory extends JavaPlugin {
     
     public void closeMySQL(){
     	try {
-			this.MyMySQL.close();
+			this.myMySQL.close();
 		} catch (SQLException e) {
 			this.doLog("SQL Error! " + e.getMessage());
 		}
@@ -249,7 +247,7 @@ public class UserHistory extends JavaPlugin {
 	public void doLog(String strLog)
 	{
 		//ToDo: Should probably check to make sure we are only logging events from us
-		this.log.info("[" + this.MyDesc.getName() + "] " + strLog);
+		this.log.info("[" + this.myDesc.getName() + "] " + strLog);
 	}
 	
 	public Timestamp playerLastOnline(Player player)
@@ -328,8 +326,7 @@ public class UserHistory extends JavaPlugin {
 			}
 		} catch (SQLException e) {
 			this.doLog("SQL Error! " + e.getMessage());
-		}
-		
+		}      
 		return(retval);	
 	}
 	
@@ -338,7 +335,7 @@ public class UserHistory extends JavaPlugin {
 		Player onlinePlayers[] = this.getServer().getOnlinePlayers();
 		
 		for(int cnt = 0; cnt < onlinePlayers.length; cnt++) 
-			  if (onlinePlayers[cnt].getAddress().getAddress().getHostAddress() == IP){
+			  if (onlinePlayers[cnt].getAddress().getAddress().getHostAddress().equalsIgnoreCase(IP)){
 				  thePlayer = onlinePlayers[cnt];
 			  }
 				
@@ -356,7 +353,7 @@ public class UserHistory extends JavaPlugin {
     	 *	Due to the method used it is inaccurate 
     	 *		to use this for calculating years. As leap years are being ignored. 
     	 *	Only returns bits of the string that are non zero.
-    	 *
+    	 *  Feels like this function was a program in itself. Ill have to save it for my utils.
     	 */
     	
     	final long Second = 1000;
@@ -551,17 +548,19 @@ public class UserHistory extends JavaPlugin {
     public long getLastSeen(Player thePlayer)
     {
     	/* Returns 0 if the Player is online now. Otherwise returns the time in millis since last seen. */
-    	long retval = 0;
+    	/*Removed for logic reasons
+    	 
+    	
     	if (thePlayer.isOnline())
     	{	// return 0
     		return retval;
-    	} else {
-    		//should be the difference between the current time and their last offline time
-    		long lastOff = (this.playerLastOffline(thePlayer)).getTime();   	
-    		retval = System.currentTimeMillis() - lastOff;
-    		return retval;
-    	}
-    }
+    	} else  {*/
+    	long retval = 0;
+    	//should be the difference between the current time and their last offline time
+    	long lastOff = (this.playerLastOffline(thePlayer)).getTime();   	
+    	retval = System.currentTimeMillis() - lastOff;
+    	return retval;
+     }
     
     public long getLastSeen(String thePlayersName)
     {
