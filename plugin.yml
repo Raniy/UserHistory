@@ -1,0 +1,20 @@
+author: Raniy
+database: true
+description: "UserHistory stores Login and Logoff events"
+main: me.raniy.plugins.UserHistory.UserHistory
+name: UserHistory
+startup: postworld
+url:
+version: 0.0.1 Alpha
+commands:
+    myage:
+        description: Tells you how long you have been on the server now and total.
+        permission: UserHistory.MyAge
+        usage: |
+            /myage
+    lastseen:
+        description: Tells you how long it has been since the specified player was seen.
+        permission: UserHistory.LastSeen
+        usage: |
+            /lastseen <playername>
+             
